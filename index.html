@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TABREZ — High-Impact Video Ads Creator & Director</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              black: '#08090a',
+              dark: '#0f1113',
+              card: '#14171a',
+              border: '#22272b',
+              accent: '#d4ff00', /* Lemon/Lime energetic pop from reference */
+              accentHover: '#b8e000',
+              muted: '#8e96a0',
+              light: '#f5f7fa'
+            }
+          },
+          fontFamily: {
+            display: ['Syne', 'sans-serif'],
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            mono: ['Space Grotesk', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #08090a; }
+    ::-webkit-scrollbar-thumb { background: #262b30; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #d4ff00; }
+
+    /* Subtle Film Grain */
+    .film-grain {
+      background-image: radial-gradient(rgba(212, 255, 0, 0.03) 1px, transparent 0);
+      background-size: 24px 24px;
+    }
+    
+    .glow-accent {
+      box-shadow: 0 0 45px -10px rgba(212, 255, 0, 0.28);
+    }
+
+    .glow-text {
+      text-shadow: 0 0 30px rgba(212, 255, 0, 0.35);
+    }
+
+    /* Video frame outline effect */
+    .cinematic-border {
+      position: relative;
+    }
+    .cinematic-border::after {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      background: linear-gradient(135deg, rgba(212,255,0,0.4), transparent 40%, rgba(255,255,255,0.05));
+      border-radius: inherit;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* Pinned Video Stage */
+    .pinned-section {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body class="bg-brand-black text-brand-light font-sans antialiased selection:bg-brand-accent selection:text-black overflow-x-hidden">
+
+  <!-- ================= TOP HEADER / NAVIGATION ================= -->
+  <header id="main-header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-brand-black/80 backdrop-blur-md border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      <!-- Logo -->
+      <a href="#hero" class="flex items-center gap-2.5 group">
+        <div class="w-7 h-7 bg-brand-accent rounded-sm flex items-center justify-center font-display font-black text-black text-sm group-hover:rotate-6 transition-transform">T</div>
+        <span class="font-display font-extrabold tracking-tighter text-2xl text-white">TABREZ<span class="text-brand-accent">.</span></span>
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="hidden md:flex items-center gap-8 text-xs tracking-wider uppercase font-mono text-brand-muted">
+        <a href="#work" class="hover:text-brand-accent transition-colors">Work</a>
+        <a href="#featured-ad" class="hover:text-brand-accent transition-colors">Breakdown</a>
+        <a href="#services" class="hover:text-brand-accent transition-colors">Services</a>
+        <a href="#process" class="hover:text-brand-accent transition-colors">Process</a>
+        <a href="#about" class="hover:text-brand-accent transition-colors">About</a>
+        <a href="#contact" class="hover:text-brand-accent transition-colors">Contact</a>
+      </nav>
+
+      <!-- Right CTAs + Admin -->
+      <div class="hidden md:flex items-center gap-4">
+        <button onclick="toggleAdminPanel(true)" title="Studio CMS & Media Controller" class="p-2 text-brand-muted hover:text-brand-accent transition-colors rounded-full hover:bg-white/5">
+          <i data-lucide="sliders" class="w-4 h-4"></i>
+        </button>
+        <a href="#contact" class="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-accent text-black font-mono text-xs font-bold uppercase tracking-wider rounded-full hover:bg-brand-accentHover transition-all shadow-[0_0_20px_rgba(212,255,0,0.25)] hover:scale-105 active:scale-95">
+          Start a Project
+          <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+        </a>
+      </div>
+
+      <!-- Mobile Hamburger Button -->
+      <button id="mobile-toggle" onclick="toggleMobileMenu()" class="md:hidden text-white p-2">
+        <i data-lucide="menu" id="menu-icon" class="w-6 h-6"></i>
+      </button>
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div id="mobile-menu" class="hidden md:hidden bg-brand-dark/95 border-b border-brand-border px-6 py-8 flex flex-col gap-6 backdrop-blur-2xl">
+      <a href="#work" onclick="toggleMobileMenu()" class="text-lg font-mono tracking-wider text-brand-light hover:text-brand-accent">WORK</a>
+      <a href="#featured-ad" onclick="toggleMobileMenu()" class="text-lg font-mono tracking-wider text-brand-light hover:text-brand-accent">BREAKDOWN</a>
+      <a href="#services" onclick="toggleMobileMenu()" class="text-lg font-mono tracking-wider text-brand-light hover:text-brand-accent">SERVICES</a>
+      <a href="#process" onclick="toggleMobileMenu()" class="text-lg font-mono tracking-wider text-brand-light hover:text-brand-accent">PROCESS</a>
+      <a href="#about" onclick="toggleMobileMenu()" class="text-lg font-mono tracking-wider text-brand-light hover:text-brand-accent">ABOUT</a>
+      <a href="#contact" onclick="toggleMobileMenu()" class="text-lg font-mono tracking-wider text-brand-light hover:text-brand-accent">CONTACT</a>
+      <div class="pt-4 flex flex-col gap-3">
+        <a href="#contact" onclick="toggleMobileMenu()" class="w-full text-center py-3 bg-brand-accent text-black font-mono font-bold text-xs uppercase tracking-wider rounded-lg">START A PROJECT</a>
+        <button onclick="toggleMobileMenu(); toggleAdminPanel(true);" class="w-full text-center py-3 bg-white/5 border border-white/10 text-brand-muted font-mono text-xs uppercase rounded-lg flex items-center justify-center gap-2">
+          <i data-lucide="sliders" class="w-4 h-4"></i> Admin Studio CMS
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= HERO SECTION ================= -->
+  <section id="hero" class="relative min-h-screen flex items-center justify-center pt-24 pb-16 px-6 film-grain overflow-hidden">
+    <!-- Ambient backlights -->
+    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[650px] h-[350px] bg-brand-accent/10 blur-[150px] rounded-full pointer-events-none"></div>
+    <div class="absolute -bottom-20 -left-20 w-[400px] h-[400px] bg-white/5 blur-[120px] rounded-full pointer-events-none"></div>
+
+    <div class="max-w-6xl mx-auto text-center z-10 flex flex-col items-center">
+      <!-- Tag Pill -->
+      <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-brand-accent/20 bg-brand-accent/5 backdrop-blur-sm mb-8 animate-fade-in">
+        <span class="w-2 h-2 rounded-full bg-brand-accent animate-pulse"></span>
+        <span class="font-mono text-xs text-brand-accent uppercase tracking-widest font-semibold" id="hero-badge">TABREZ — Video Ads Creator & Director</span>
+      </div>
+
+      <!-- Main Heading -->
+      <h1 class="font-display font-black text-4xl sm:text-6xl md:text-8xl lg:text-9xl tracking-tight leading-[0.92] text-white uppercase mb-8 max-w-5xl">
+        I Create Ads <br class="hidden sm:inline"/>
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent via-white to-brand-accent/80">People Stop</span> <br/>
+        To Watch<span class="text-brand-accent">.</span>
+      </h1>
+
+      <!-- Subtitle -->
+      <p id="hero-subtitle" class="text-brand-muted text-base sm:text-lg md:text-xl font-normal max-w-2xl leading-relaxed mb-10 text-balance">
+        Professional video ads built to capture instant retention, communicate value with laser clarity, and scale brand revenue.
+      </p>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+        <a href="#featured-ad" class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 bg-brand-accent text-black font-mono text-xs font-bold uppercase tracking-widest rounded-full hover:bg-brand-accentHover transition-all transform hover:-translate-y-1 shadow-[0_10px_30px_-5px_rgba(212,255,0,0.3)]">
+          <i data-lucide="play" class="w-4 h-4 fill-black"></i>
+          Watch Showcase Reel
+        </a>
+        <a href="#work" class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 bg-white/5 border border-white/10 hover:border-white/20 text-white font-mono text-xs font-semibold uppercase tracking-widest rounded-full hover:bg-white/10 transition-all">
+          Explore Selected Ads
+          <i data-lucide="arrow-down" class="w-4 h-4 text-brand-muted"></i>
+        </a>
+      </div>
+
+      <!-- Metrics summary strip -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-12 mt-20 pt-12 border-t border-white/5 w-full max-w-4xl">
+        <div>
+          <div class="font-display font-black text-3xl sm:text-4xl text-white">45M+</div>
+          <div class="font-mono text-xs text-brand-muted uppercase tracking-wider mt-1">Organic & Paid Views</div>
+        </div>
+        <div>
+          <div class="font-display font-black text-3xl sm:text-4xl text-brand-accent">4.8X</div>
+          <div class="font-mono text-xs text-brand-muted uppercase tracking-wider mt-1">Average ROAS Lift</div>
+        </div>
+        <div>
+          <div class="font-display font-black text-3xl sm:text-4xl text-white">120+</div>
+          <div class="font-mono text-xs text-brand-muted uppercase tracking-wider mt-1">Commercial Assets</div>
+        </div>
+        <div>
+          <div class="font-display font-black text-3xl sm:text-4xl text-white">99.4%</div>
+          <div class="font-mono text-xs text-brand-muted uppercase tracking-wider mt-1">On-Time Delivery</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= STICKY / CINEMATIC VIDEO SHOWCASE ================= -->
+  <section id="featured-ad" class="relative bg-brand-dark py-24 border-y border-white/5">
+    <div class="max-w-7xl mx-auto px-6">
+      
+      <!-- Section Header -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+        <div>
+          <div class="font-mono text-xs text-brand-accent tracking-widest uppercase font-semibold mb-2 flex items-center gap-2">
+            <span class="w-1.5 h-1.5 bg-brand-accent rounded-full"></span>
+            Featured Commercial Production
+          </div>
+          <h2 class="font-display font-black text-3xl sm:text-5xl uppercase tracking-tight text-white">
+            Lemon Monster <span class="text-brand-muted font-normal font-sans text-2xl sm:text-3xl">/ 3D & Live Commercial</span>
+          </h2>
+        </div>
+        <div class="flex items-center gap-3">
+          <button id="video-mute-btn" onclick="toggleVideoSound()" class="px-4 py-2 bg-white/5 border border-white/10 rounded-full font-mono text-xs tracking-wider uppercase text-white hover:bg-white/10 transition-all flex items-center gap-2">
+            <i data-lucide="volume-x" id="mute-icon" class="w-4 h-4 text-brand-accent"></i>
+            <span id="mute-label">Unmute Audio</span>
+          </button>
+          <button onclick="restartFeaturedVideo()" class="p-2 bg-white/5 border border-white/10 rounded-full text-white hover:bg-white/10 transition-all" title="Restart Video">
+            <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Video Card Player Container -->
+      <div class="relative bg-brand-black rounded-2xl border border-white/10 overflow-hidden shadow-2xl cinematic-border">
+        <div class="grid grid-cols-1 lg:grid-cols-12 items-center">
+          
+          <!-- Video Screen (Vertical 9:16 Aspect Fit or Responsive Embed) -->
+          <div class="lg:col-span-7 bg-black flex items-center justify-center relative min-h-[500px] sm:min-h-[640px] p-4 sm:p-8">
+            <div class="relative max-w-[360px] w-full rounded-xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] border border-white/15 aspect-[9/16] bg-brand-dark group">
+              <video 
+                id="mainFeaturedVideo" 
+                class="w-full h-full object-cover cursor-pointer"
+                playsinline 
+                autoplay 
+                muted 
+                loop 
+                preload="metadata"
+                onclick="togglePlayPause()"
+              >
+                <source id="videoSourceEl" src="https://dvxrhkgloakisnvqoxgl.supabase.co/storage/v1/object/sign/videos/inputs/1788514758907_s5s2fjod2.mp4?token=eyJraWQiOiI0NWE1YWU1ZS0xNzg4LTRiMWYtYWM5OC1hMjgwNmQ2OTM4ZWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJ2aWRlb3MvaW5wdXRzLzE3ODg1MTQ3NTg5MDdfczVzMmZqb2QyLm1wNCIsInNjb3BlIjoiZG93bmxvYWQiLCJpYXQiOjE3ODg1MTQ4NjQsImV4cCI6MTgyMDA1MDg2NH0.roR93C3mWMb1q5FzrVELmJCI5x5nPJ43RBwlXXZWiqM" type="video/mp4">
+                Your browser does not support video tag.
+              </video>
+
+              <!-- Central Play/Pause Overlay indicator -->
+              <div id="playPauseOverlay" class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                <div class="w-14 h-14 rounded-full bg-brand-accent/90 text-black flex items-center justify-center">
+                  <i data-lucide="play" id="centerPlayIcon" class="w-6 h-6 ml-0.5 fill-black"></i>
+                </div>
+              </div>
+
+              <!-- Time / Live scrub bar -->
+              <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-4 flex flex-col gap-2">
+                <input type="range" id="videoProgressBar" value="0" min="0" max="100" step="0.1" oninput="seekFeaturedVideo(this.value)" class="w-full h-1 bg-white/20 rounded-lg appearance-none cursor-pointer accent-brand-accent">
+                <div class="flex items-center justify-between text-[11px] font-mono text-brand-muted">
+                  <span id="currentTimeDisplay">00:00</span>
+                  <span class="text-brand-accent font-semibold flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 bg-brand-accent rounded-full animate-ping"></span> 4K UHD MASTER
+                  </span>
+                  <span id="durationTimeDisplay">00:21</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Video Narrative & Ad Anatomy Breakdown -->
+          <div class="lg:col-span-5 p-8 sm:p-12 border-t lg:border-t-0 lg:border-l border-white/5 flex flex-col justify-between h-full bg-gradient-to-b from-brand-card/60 to-brand-black">
+            <div>
+              <div class="inline-block px-3 py-1 bg-brand-accent/10 border border-brand-accent/20 text-brand-accent font-mono text-xs rounded mb-4">
+                RETENTION ENGINE FRAMEWORK
+              </div>
+              <h3 class="font-display font-bold text-2xl sm:text-3xl text-white mb-4">
+                Hyper-Tactile Product Framing & Kinetic Visual Hook
+              </h3>
+              <p class="text-brand-muted text-sm leading-relaxed mb-6">
+                Engineered for beverage brand launch. Combines photorealistic 3D condensation rendering, high-speed camera tactile macro shots, and gym lifestyle talent staging to convert fitness enthusiasts.
+              </p>
+
+              <!-- Creative Beats Timeline -->
+              <div class="space-y-4">
+                <div class="p-3.5 bg-white/[0.02] border border-white/5 rounded-xl flex items-start gap-3 hover:border-brand-accent/30 transition-colors">
+                  <span class="font-mono text-xs font-bold text-brand-accent bg-brand-accent/10 px-2 py-1 rounded">0.0 - 0.4s</span>
+                  <div>
+                    <h4 class="text-white text-xs font-bold uppercase font-mono">3D Macro Condensation Reveal</h4>
+                    <p class="text-brand-muted text-xs mt-0.5">High-contrast lemon slice slice-through to stop thumb scroll immediately.</p>
+                  </div>
+                </div>
+
+                <div class="p-3.5 bg-white/[0.02] border border-white/5 rounded-xl flex items-start gap-3 hover:border-brand-accent/30 transition-colors">
+                  <span class="font-mono text-xs font-bold text-brand-accent bg-brand-accent/10 px-2 py-1 rounded">0.4 - 0.9s</span>
+                  <div>
+                    <h4 class="text-white text-xs font-bold uppercase font-mono">Tactile Sound Design & Can Lockup</h4>
+                    <p class="text-brand-muted text-xs mt-0.5">Subtle carbonation pop SFX synced to bold typography animation.</p>
+                  </div>
+                </div>
+
+                <div class="p-3.5 bg-white/[0.02] border border-white/5 rounded-xl flex items-start gap-3 hover:border-brand-accent/30 transition-colors">
+                  <span class="font-mono text-xs font-bold text-brand-accent bg-brand-accent/10 px-2 py-1 rounded">0.9 - 1.8s</span>
+                  <div>
+                    <h4 class="text-white text-xs font-bold uppercase font-mono">Lifestyle Post-Workout Refresh Action</h4>
+                    <p class="text-brand-muted text-xs mt-0.5">Aesthetic athlete talent consuming product in locker environment.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-8 pt-6 border-t border-white/5 flex items-center justify-between">
+              <div>
+                <span class="block font-mono text-[11px] text-brand-muted uppercase">Production Tools</span>
+                <span class="font-mono text-xs text-white">After Effects / C4D / DaVinci Resolve</span>
+              </div>
+              <button onclick="toggleAdminPanel(true)" class="text-xs font-mono text-brand-accent underline hover:text-white transition-colors flex items-center gap-1">
+                Replace Video in CMS <i data-lucide="edit-3" class="w-3 h-3"></i>
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= SELECTED WORK ================= -->
+  <section id="work" class="py-24 px-6 max-w-7xl mx-auto">
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+      <div>
+        <div class="font-mono text-xs text-brand-accent uppercase tracking-widest font-semibold mb-2">Portfolio Archive</div>
+        <h2 class="font-display font-black text-4xl sm:text-6xl text-white uppercase tracking-tight">Selected Work<span class="text-brand-accent">.</span></h2>
+      </div>
+      
+      <!-- Filter Tabs -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-2" id="workFilters">
+        <button onclick="filterWork('all')" class="filter-btn active px-4 py-2 bg-brand-accent text-black font-mono text-xs font-bold uppercase rounded-full transition-all">All Ads</button>
+        <button onclick="filterWork('beverage')" class="filter-btn px-4 py-2 bg-brand-card hover:bg-white/10 text-brand-muted hover:text-white font-mono text-xs uppercase rounded-full transition-all">Beverage & FMCG</button>
+        <button onclick="filterWork('fitness')" class="filter-btn px-4 py-2 bg-brand-card hover:bg-white/10 text-brand-muted hover:text-white font-mono text-xs uppercase rounded-full transition-all">Fitness & Lifestyle</button>
+        <button onclick="filterWork('tech')" class="filter-btn px-4 py-2 bg-brand-card hover:bg-white/10 text-brand-muted hover:text-white font-mono text-xs uppercase rounded-full transition-all">SaaS & Tech</button>
+      </div>
+    </div>
+
+    <!-- Work Grid (Dynamically rendered & editable via Admin) -->
+    <div id="workGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Items dynamically populated via JavaScript -->
+    </div>
+  </section>
+
+  <!-- ================= SERVICES ================= -->
+  <section id="services" class="py-24 px-6 bg-brand-dark border-t border-white/5">
+    <div class="max-w-7xl mx-auto">
+      <div class="max-w-2xl mb-16">
+        <div class="font-mono text-xs text-brand-accent uppercase tracking-widest font-semibold mb-2">Capabilities</div>
+        <h2 class="font-display font-black text-4xl sm:text-6xl text-white uppercase tracking-tight">
+          Engineered for <br/><span class="text-brand-accent">Direct Conversions.</span>
+        </h2>
+        <p class="text-brand-muted text-base mt-4">
+          Every frame is mathematically weighted to retain thumb-stoppers, explain value in sub-3 seconds, and trigger instant buying action.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="servicesGrid">
+        <!-- Service Card 1 -->
+        <div class="bg-brand-card/70 border border-white/5 p-8 rounded-2xl hover:border-brand-accent/40 transition-all group flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center text-brand-accent mb-6 group-hover:scale-110 group-hover:bg-brand-accent group-hover:text-black transition-all">
+              <i data-lucide="sparkles" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-display font-bold text-xl text-white mb-3">3D Product Commercials</h3>
+            <p class="text-brand-muted text-sm leading-relaxed mb-6">
+              Hyper-realistic 3D product renders, exploded views, tactile textures, liquid simulations, and dynamic studio lighting that makes packaging look legendary.
+            </p>
+          </div>
+          <ul class="font-mono text-xs text-white/70 space-y-2 border-t border-white/5 pt-4">
+            <li class="flex items-center gap-2"><span class="text-brand-accent">✓</span> Cinema 4D / Octane Render</li>
+            <li class="flex items-center gap-2"><span class="text-brand-accent">✓</span> Photorealistic Texturing</li>
+          </ul>
+        </div>
+
+        <!-- Service Card 2 -->
+        <div class="bg-brand-card/70 border border-white/5 p-8 rounded-2xl hover:border-brand-accent/40 transition-all group flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center text-brand-accent mb-6 group-hover:scale-110 group-hover:bg-brand-accent group-hover:text-black transition-all">
+              <i data-lucide="zap" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-display font-bold text-xl text-white mb-3">Direct-Response Video Ads</h3>
+            <p class="text-brand-muted text-sm leading-relaxed mb-6">
+              Hook-driven paid social creatives for Meta, TikTok, YouTube Shorts & IG Reels optimized for cost-per-acquisition (CPA) reduction.
+            </p>
+          </div>
+          <ul class="font-mono text-xs text-white/70 space-y-2 border-t border-white/5 pt-4">
+            <li class="flex items-center gap-2"><span class="text-brand-accent">✓</span> 3-5 Iterative Hook Variations</li>
+            <li class="flex items-center gap-2"><span class="text-brand-accent">✓</span> Paid Ads A/B Split Ready</li>
+          </ul>
+        </div>
+
+        <!-- Service Card 3 -->
+        <div class="bg-brand-card/70 border border-white/5 p-8 rounded-2xl hover:border-brand-accent/40 transition-all group flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center text-brand-accent mb-6 group-hover:scale-110 group-hover:bg-brand-accent group-hover:text-black transition-all">
+              <i data-lucide="volume-2" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-display font-bold text-xl text-white mb-3">Sound Design & Color Grading</h3>
+            <p class="text-brand-muted text-sm leading-relaxed mb-6">
+              Custom tactile sound engineering (foley, riser hits, sub drops) combined with cinematic DaVinci Resolve color pipelines tailored for OLED displays.
+            </p>
+          </div>
+          <ul class="font-mono text-xs text-white/70 space-y-2 border-t border-white/5 pt-4">
+            <li class="flex items-center gap-2"><span class="text-brand-accent">✓</span> Multi-track ASMR Foley</li>
+            <li class="flex items-center gap-2"><span class="text-brand-accent">✓</span> Custom LUTs & HDR Master</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CREATIVE PROCESS ================= -->
+  <section id="process" class="py-24 px-6 max-w-7xl mx-auto">
+    <div class="text-center max-w-3xl mx-auto mb-20">
+      <div class="font-mono text-xs text-brand-accent uppercase tracking-widest font-semibold mb-2">Methodology</div>
+      <h2 class="font-display font-black text-4xl sm:text-6xl text-white uppercase tracking-tight">The 4-Step Ad Formula</h2>
+      <p class="text-brand-muted text-base mt-4">Predictable excellence from brief to launch-ready high-resolution assets.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 relative">
+      <!-- Step 1 -->
+      <div class="p-8 bg-brand-card/50 border border-white/5 rounded-2xl relative">
+        <span class="font-display font-black text-5xl text-white/10 block mb-4">01</span>
+        <h3 class="font-mono text-sm uppercase font-bold text-brand-accent mb-2">Hook & Scriptwriting</h3>
+        <p class="text-brand-muted text-xs leading-relaxed">
+          Competitor ad teardown, audience psychographics extraction, and crafting high-retention 3-second script angles.
+        </p>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="p-8 bg-brand-card/50 border border-white/5 rounded-2xl relative">
+        <span class="font-display font-black text-5xl text-white/10 block mb-4">02</span>
+        <h3 class="font-mono text-sm uppercase font-bold text-brand-accent mb-2">3D / Filming & Motion</h3>
+        <p class="text-brand-muted text-xs leading-relaxed">
+          Staging dynamic lighting, fluid product simulations, macro tactile cameras, and kinetic 2D/3D kinetic type.
+        </p>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="p-8 bg-brand-card/50 border border-white/5 rounded-2xl relative">
+        <span class="font-display font-black text-5xl text-white/10 block mb-4">03</span>
+        <h3 class="font-mono text-sm uppercase font-bold text-brand-accent mb-2">Tactile Audio & Polish</h3>
+        <p class="text-brand-muted text-xs leading-relaxed">
+          Layered foley sound effects, rhythmic pacing sync, custom color space mapping, and punchy motion tracking.
+        </p>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="p-8 bg-brand-card/50 border border-white/5 rounded-2xl relative">
+        <span class="font-display font-black text-5xl text-white/10 block mb-4">04</span>
+        <h3 class="font-mono text-sm uppercase font-bold text-brand-accent mb-2">Multi-Format Delivery</h3>
+        <p class="text-brand-muted text-xs leading-relaxed">
+          Exporting 9:16 vertical, 1:1 feed square, and 16:9 landscape deliverables with subtitle baked & raw clean files.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ABOUT SECTION ================= -->
+  <section id="about" class="py-24 px-6 bg-brand-dark border-y border-white/5">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      
+      <div class="lg:col-span-5 relative">
+        <div class="aspect-[4/5] rounded-2xl bg-brand-card border border-white/10 overflow-hidden relative group">
+          <!-- Stylized director profile visual -->
+          <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10"></div>
+          <img 
+            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1000&q=80" 
+            alt="Tabrez Creator" 
+            class="w-full h-full object-cover grayscale contrast-125 group-hover:scale-105 transition-transform duration-700"
+          />
+          <div class="absolute bottom-6 left-6 right-6 z-20">
+            <div class="font-display font-black text-2xl text-white uppercase">TABREZ</div>
+            <div class="font-mono text-xs text-brand-accent tracking-widest uppercase">Video Ads Creator & Editor</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-7">
+        <div class="font-mono text-xs text-brand-accent uppercase tracking-widest font-semibold mb-2">Director's Note</div>
+        <h2 class="font-display font-black text-3xl sm:text-5xl text-white uppercase tracking-tight leading-tight mb-6">
+          "Attention is the new currency. <span class="text-brand-accent">I make sure you win it.</span>"
+        </h2>
+        <p class="text-brand-muted text-base leading-relaxed mb-6">
+          I work with forward-thinking DTC brands, venture-backed startups, and high-growth consumer products to turn mundane promotions into cinematic commercials that convert cold viewers into die-hard customers.
+        </p>
+        <p class="text-brand-muted text-base leading-relaxed mb-8">
+          By combining cutting-edge 3D product rendering, high-impact motion graphics, and psycho-acoustic sound design, we bypass ad fatigue and create commercials viewers genuinely enjoy watching.
+        </p>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-6 pt-6 border-t border-white/5">
+          <div>
+            <div class="font-mono text-xs text-brand-muted uppercase">Location</div>
+            <div class="font-mono text-sm text-white font-semibold mt-1">Global / Remote</div>
+          </div>
+          <div>
+            <div class="font-mono text-xs text-brand-muted uppercase">Turnaround Time</div>
+            <div class="font-mono text-sm text-brand-accent font-semibold mt-1">4 - 7 Business Days</div>
+          </div>
+          <div>
+            <div class="font-mono text-xs text-brand-muted uppercase">Primary Software</div>
+            <div class="font-mono text-sm text-white font-semibold mt-1">C4D / AE / DaVinci</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= CONTACT / INQUIRY CRM ================= -->
+  <section id="contact" class="py-24 px-6 max-w-7xl mx-auto">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+      
+      <div class="lg:col-span-5">
+        <div class="font-mono text-xs text-brand-accent uppercase tracking-widest font-semibold mb-2">Direct Booking</div>
+        <h2 class="font-display font-black text-4xl sm:text-6xl text-white uppercase tracking-tight mb-6">
+          Let's Build <br/>Your Next <span class="text-brand-accent">Winner.</span>
+        </h2>
+        <p class="text-brand-muted text-sm leading-relaxed mb-8">
+          Have an upcoming product launch or need high-converting creative ad variations for your paid acquisition funnels? Fill out the brief or reach out directly.
+        </p>
+
+        <div class="space-y-4">
+          <div class="flex items-center gap-4 text-sm font-mono text-brand-muted">
+            <div class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-brand-accent">
+              <i data-lucide="mail" class="w-4 h-4"></i>
+            </div>
+            <span>tabrez.creatives@gmail.com</span>
+          </div>
+          <div class="flex items-center gap-4 text-sm font-mono text-brand-muted">
+            <div class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-brand-accent">
+              <i data-lucide="clock" class="w-4 h-4"></i>
+            </div>
+            <span>Average response: &lt; 2 hours</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-7 bg-brand-card/80 border border-white/10 p-8 sm:p-10 rounded-3xl backdrop-blur-xl">
+        <form id="projectInquiryForm" onsubmit="handleInquirySubmit(event)" class="space-y-6">
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div>
+              <label class="block font-mono text-xs uppercase text-brand-muted mb-2">Your Name *</label>
+              <input type="text" id="clientName" required placeholder="Alex Rivera" class="w-full bg-brand-black/80 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-brand-accent transition-colors font-sans" />
+            </div>
+            <div>
+              <label class="block font-mono text-xs uppercase text-brand-muted mb-2">Work Email *</label>
+              <input type="email" id="clientEmail" required placeholder="alex@brand.com" class="w-full bg-brand-black/80 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-brand-accent transition-colors font-sans" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div>
+              <label class="block font-mono text-xs uppercase text-brand-muted mb-2">Brand / Product Link</label>
+              <input type="text" id="clientBrand" placeholder="brandname.com" class="w-full bg-brand-black/80 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-brand-accent transition-colors font-sans" />
+            </div>
+            <div>
+              <label class="block font-mono text-xs uppercase text-brand-muted mb-2">Estimated Budget Range</label>
+              <select id="clientBudget" class="w-full bg-brand-black/80 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-brand-accent transition-colors font-sans">
+                <option value="$1,500 - $3,000">$1,500 — $3,000 (1-2 Ads)</option>
+                <option value="$3,000 - $6,000" selected>$3,000 — $6,000 (Multi-Hook Creative Pack)</option>
+                <option value="$6,000+">$6,000+ (Full Commercial + 3D Renderings)</option>
+                <option value="Retainer">Monthly Creative Retainer</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-mono text-xs uppercase text-brand-muted mb-2">Project Vision & Goals *</label>
+            <textarea id="clientMessage" rows="4" required placeholder="Tell me about your product, desired vibe, target ad platforms (Meta/TikTok/YouTube), and target deadlines..." class="w-full bg-brand-black/80 border border-white/10 rounded-xl p-4 text-white text-sm focus:outline-none focus:border-brand-accent transition-colors font-sans"></textarea>
+          </div>
+
+          <button type="submit" class="w-full py-4 bg-brand-accent hover:bg-brand-accentHover text-black font-mono font-bold text-xs uppercase tracking-widest rounded-xl transition-all shadow-[0_0_30px_rgba(212,255,0,0.25)] flex items-center justify-center gap-2">
+            <span>Send Project Inquiry</span>
+            <i data-lucide="send" class="w-4 h-4"></i>
+          </button>
+
+          <p id="inquiryStatus" class="text-center font-mono text-xs text-brand-accent hidden"></p>
+        </form>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="border-t border-white/5 py-12 px-6 bg-brand-black text-brand-muted text-xs font-mono">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-3">
+        <span class="font-display font-extrabold text-white text-base tracking-tighter">TABREZ<span class="text-brand-accent">.</span></span>
+        <span>© <span id="currentYear"></span> All Rights Reserved.</span>
+      </div>
+
+      <div class="flex items-center gap-6">
+        <a href="#hero" class="hover:text-white transition-colors">Back to Top ↑</a>
+        <button onclick="toggleAdminPanel(true)" class="hover:text-brand-accent transition-colors flex items-center gap-1.5">
+          <i data-lucide="lock" class="w-3.5 h-3.5"></i> Admin CMS
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= CMS & MEDIA ADMIN DRAWER ================= -->
+  <div id="adminModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4">
+    <div class="bg-brand-card border border-white/10 w-full max-w-3xl rounded-3xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto shadow-2xl">
+      
+      <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-6">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-brand-accent text-black flex items-center justify-center font-bold">
+            <i data-lucide="sliders" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="font-display font-bold text-lg text-white">Tabrez Studio Admin Panel</h3>
+            <p class="font-mono text-xs text-brand-muted">Real-time content, Video Ads manager, and Leads CRM</p>
+          </div>
+        </div>
+        <button onclick="toggleAdminPanel(false)" class="p-2 text-brand-muted hover:text-white rounded-full bg-white/5">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Admin Tab navigation -->
+      <div class="flex gap-2 border-b border-white/5 pb-4 mb-6">
+        <button onclick="switchAdminTab('videoTab')" id="tab-btn-video" class="px-4 py-2 bg-brand-accent text-black font-mono text-xs font-bold uppercase rounded-lg">Featured Video</button>
+        <button onclick="switchAdminTab('workTab')" id="tab-btn-work" class="px-4 py-2 bg-white/5 text-brand-muted font-mono text-xs uppercase rounded-lg hover:text-white">Manage Work Items</button>
+        <button onclick="switchAdminTab('leadsTab')" id="tab-btn-leads" class="px-4 py-2 bg-white/5 text-brand-muted font-mono text-xs uppercase rounded-lg hover:text-white flex items-center gap-1.5">
+          CRM Leads <span id="leadsCountBadge" class="w-4 h-4 bg-brand-accent text-black rounded-full text-[10px] flex items-center justify-center font-bold">0</span>
+        </button>
+      </div>
+
+      <!-- TAB 1: Featured Video Control -->
+      <div id="videoTab" class="space-y-6">
+        <div>
+          <label class="block font-mono text-xs uppercase text-brand-muted mb-2">Featured Video MP4 Direct Link / CDN</label>
+          <div class="flex gap-2">
+            <input type="text" id="adminVideoUrlInput" placeholder="https://domain.com/video.mp4" class="flex-1 bg-brand-black border border-white/10 rounded-xl px-4 py-3 text-white text-xs font-mono focus:border-brand-accent outline-none" />
+            <button onclick="updateFeaturedVideoFromAdmin()" class="px-5 py-3 bg-brand-accent text-black font-mono text-xs font-bold uppercase rounded-xl hover:bg-brand-accentHover">Update Video</button>
+          </div>
+          <p class="text-[11px] font-mono text-brand-muted mt-2">Paste any valid MP4 video link to replace the pinned breakdown video immediately.</p>
+        </div>
+
+        <div class="p-4 bg-brand-black/60 rounded-xl border border-white/5">
+          <label class="block font-mono text-xs uppercase text-brand-accent mb-2">Or Upload Local MP4</label>
+          <input type="file" id="localVideoUploader" accept="video/mp4,video/webm" onchange="handleLocalVideoUpload(event)" class="text-xs font-mono text-brand-muted file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-white/10 file:text-white hover:file:bg-white/20" />
+        </div>
+
+        <div class="pt-4 border-t border-white/5">
+          <h4 class="font-mono text-xs uppercase text-white font-bold mb-3">Hero Section Quick Edit</h4>
+          <div class="space-y-3">
+            <input type="text" id="adminHeroBadgeInput" placeholder="Hero Badge Text" class="w-full bg-brand-black border border-white/10 rounded-xl px-4 py-2.5 text-white text-xs font-mono" />
+            <textarea id="adminHeroSubInput" placeholder="Hero Subtitle" class="w-full bg-brand-black border border-white/10 rounded-xl p-3 text-white text-xs font-mono" rows="2"></textarea>
+            <button onclick="saveHeroEdits()" class="px-4 py-2 bg-white/10 hover:bg-brand-accent hover:text-black text-white font-mono text-xs uppercase rounded-lg transition-colors">Save Hero Changes</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: Manage Work Items -->
+      <div id="workTab" class="space-y-6 hidden">
+        <div class="flex items-center justify-between">
+          <h4 class="font-mono text-xs text-white uppercase font-bold">Portfolio Items</h4>
+          <button onclick="openAddNewWorkModal()" class="px-3 py-1.5 bg-brand-accent text-black font-mono text-xs font-bold rounded-lg flex items-center gap-1">
+            <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add New Ad Project
+          </button>
+        </div>
+        <div id="adminWorkList" class="space-y-3 max-h-[320px] overflow-y-auto pr-1">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- TAB 3: Leads CRM -->
+      <div id="leadsTab" class="space-y-4 hidden">
+        <div class="flex items-center justify-between">
+          <h4 class="font-mono text-xs text-white uppercase font-bold">Client Inquiries & Briefs</h4>
+          <button onclick="clearAllLeads()" class="text-xs font-mono text-red-400 hover:underline">Clear Inbox</button>
+        </div>
+        <div id="adminLeadsList" class="space-y-3 max-h-[350px] overflow-y-auto pr-1">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Video Modal for Portfolio Item Playback -->
+  <div id="portfolioVideoModal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden items-center justify-center p-4">
+    <div class="relative w-full max-w-lg bg-black rounded-2xl overflow-hidden border border-white/15">
+      <button onclick="closePortfolioModal()" class="absolute top-4 right-4 z-20 w-8 h-8 bg-black/60 text-white rounded-full flex items-center justify-center hover:bg-brand-accent hover:text-black transition-colors">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+      <div class="aspect-[9/16] max-h-[80vh] w-full bg-brand-dark flex items-center justify-center">
+        <video id="modalVideoPlayer" class="w-full h-full object-contain" controls playsinline></video>
+      </div>
+      <div class="p-4 bg-brand-card">
+        <h4 id="modalVideoTitle" class="font-display font-bold text-white text-base"></h4>
+        <p id="modalVideoDesc" class="font-mono text-xs text-brand-muted mt-1"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= JAVASCRIPT LOGIC ================= -->
+  <script>
+    // Initialize icons
+    lucide.createIcons();
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+    // Portfolio Storage & Defaults
+    const DEFAULT_VIDEO_URL = "https://dvxrhkgloakisnvqoxgl.supabase.co/storage/v1/object/sign/videos/inputs/1788514758907_s5s2fjod2.mp4?token=eyJraWQiOiI0NWE1YWU1ZS0xNzg4LTRiMWYtYWM5OC1hMjgwNmQ2OTM4ZWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJ2aWRlb3MvaW5wdXRzLzE3ODg1MTQ3NTg5MDdfczVzMmZqb2QyLm1wNCIsInNjb3BlIjoiZG93bmxvYWQiLCJpYXQiOjE3ODg1MTQ4NjQsImV4cCI6MTgyMDA1MDg2NH0.roR93C3mWMb1q5FzrVELmJCI5x5nPJ43RBwlXXZWiqM";
+
+    let portfolioData = JSON.css || [
+      {
+        id: "1",
+        title: "LEMON MONSTER — ENERGY BURST",
+        category: "beverage",
+        categoryLabel: "Beverage Commercial",
+        stats: "+340% ROAS",
+        thumbnail: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=800&q=80",
+        videoUrl: DEFAULT_VIDEO_URL,
+        description: "Kinetic 3D citrus soda commercial with macro liquid foley and locker room talent staging."
+      },
+      {
+        id: "2",
+        title: "AURA ZERO — HYDRO FLASK",
+        category: "fitness",
+        categoryLabel: "Fitness & Lifestyle",
+        stats: "12.4M Views",
+        thumbnail: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=800&q=80",
+        videoUrl: DEFAULT_VIDEO_URL,
+        description: "High-cadence crossfit workout spot engineered for direct Instagram Reels conversions."
+      },
+      {
+        id: "3",
+        title: "PULSE AUDIO — NOISE MASTER",
+        category: "tech",
+        categoryLabel: "Tech Hardware",
+        stats: "5.2x CTR",
+        thumbnail: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80",
+        videoUrl: DEFAULT_VIDEO_URL,
+        description: "Exploded 3D parts animation detailing titanium diaphragm acoustics & ANC power."
+      },
+      {
+        id: "4",
+        title: "VOLT ELIXIR — PRE WORKOUT",
+        category: "beverage",
+        categoryLabel: "Beverage & Supplement",
+        stats: "48K Sales",
+        thumbnail: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=800&q=80",
+        videoUrl: DEFAULT_VIDEO_URL,
+        description: "Aggressive motion cut ad with explosive neon lighting and bass-heavy audio design."
+      },
+      {
+        id: "5",
+        title: "NEXUS AI — WORKFLOW ACCEL",
+        category: "tech",
+        categoryLabel: "SaaS & Tech",
+        stats: "$2.1M ARR Lift",
+        thumbnail: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80",
+        videoUrl: DEFAULT_VIDEO_URL,
+        description: "Dynamic UI 3D camera sweeps combined with abstract motion graphics for B2B tech."
+      },
+      {
+        id: "6",
+        title: "TITAN APPAREL — PRO DROP",
+        category: "fitness",
+        categoryLabel: "Fitness & Lifestyle",
+        stats: "Sold Out in 3 Hrs",
+        thumbnail: "https://images.unsplash.com/photo-1574680096145-d05b474e2155?auto=format&fit=crop&w=800&q=80",
+        videoUrl: DEFAULT_VIDEO_URL,
+        description: "Editorial streetwear commercial shot with anamorphic lens simulation and grime sound design."
+      }
+    ];
+
+    // Leads store
+    let leadsData = JSON.parse(localStorage.getItem('tabrez_crm_leads')) || [
+      {
+        name: "Marcus Vance",
+        email: "marcus@vanceenergy.com",
+        budget: "$3,000 - $6,000",
+        brand: "Vance Energy Drinks",
+        message: "Need 3 hook variants for our TikTok organic & spark ads launch next month.",
+        date: "Just now"
+      }
+    ];
+
+    // Setup stored active video
+    const storedVideo = localStorage.getItem('tabrez_featured_video') || DEFAULT_VIDEO_URL;
+    const heroBadgeStored = localStorage.getItem('tabrez_hero_badge');
+    const heroSubStored = localStorage.getItem('tabrez_hero_sub');
+
+    if (heroBadgeStored) document.getElementById('hero-badge').textContent = heroBadgeStored;
+    if (heroSubStored) document.getElementById('hero-subtitle').textContent = heroSubStored;
+
+    const featuredVideoEl = document.getElementById('mainFeaturedVideo');
+    const videoSourceEl = document.getElementById('videoSourceEl');
+    videoSourceEl.src = storedVideo;
+    featuredVideoEl.load();
+
+    document.getElementById('adminVideoUrlInput').value = storedVideo;
+    document.getElementById('adminHeroBadgeInput').value = document.getElementById('hero-badge').textContent;
+    document.getElementById('adminHeroSubInput').value = document.getElementById('hero-subtitle').textContent;
+
+    // Render Work Grid
+    function renderWorkGrid(filter = 'all') {
+      const grid = document.getElementById('workGrid');
+      grid.innerHTML = '';
+
+      const items = filter === 'all' 
+        ? portfolioData 
+        : portfolioData.filter(item => item.category === filter);
+
+      items.forEach(item => {
+        const card = document.createElement('div');
+        card.className = "group relative bg-brand-card rounded-2xl border border-white/5 overflow-hidden hover:border-brand-accent/40 transition-all duration-300 flex flex-col";
+        card.innerHTML = `
+          <div class="relative aspect-[16/10] overflow-hidden bg-brand-dark cursor-pointer" onclick="openPortfolioModal('${item.id}')">
+            <img src="${item.thumbnail}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+            
+            <div class="absolute top-4 left-4">
+              <span class="px-2.5 py-1 bg-black/70 backdrop-blur-md border border-white/10 text-white font-mono text-[10px] uppercase tracking-wider rounded-md">
+                ${item.categoryLabel}
+              </span>
+            </div>
+
+            <div class="absolute top-4 right-4">
+              <span class="px-2.5 py-1 bg-brand-accent text-black font-mono font-bold text-[10px] uppercase rounded-md shadow-lg">
+                ${item.stats}
+              </span>
+            </div>
+
+            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <div class="w-12 h-12 rounded-full bg-brand-accent text-black flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform">
+                <i data-lucide="play" class="w-5 h-5 fill-black ml-0.5"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6 flex-1 flex flex-col justify-between">
+            <div>
+              <h3 class="font-display font-bold text-lg text-white group-hover:text-brand-accent transition-colors mb-2">${item.title}</h3>
+              <p class="text-brand-muted text-xs leading-relaxed">${item.description}</p>
+            </div>
+            <div class="mt-4 pt-4 border-t border-white/5 flex items-center justify-between">
+              <button onclick="openPortfolioModal('${item.id}')" class="font-mono text-xs text-brand-accent uppercase font-bold flex items-center gap-1 hover:underline">
+                Play Commercial <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      lucide.createIcons();
+    }
+
+    function filterWork(cat) {
+      document.querySelectorAll('.filter-btn').forEach(b => {
+        b.classList.remove('bg-brand-accent', 'text-black', 'font-bold');
+        b.classList.add('bg-brand-card', 'text-brand-muted');
+      });
+      event.target.classList.remove('bg-brand-card', 'text-brand-muted');
+      event.target.classList.add('bg-brand-accent', 'text-black', 'font-bold');
+      renderWorkGrid(cat);
+    }
+
+    // Video Player Interactive Controls
+    const videoProgress = document.getElementById('videoProgressBar');
+    const currentTimeDisp = document.getElementById('currentTimeDisplay');
+    const durationTimeDisp = document.getElementById('durationTimeDisplay');
+
+    featuredVideoEl.addEventListener('timeupdate', () => {
+      if (!isNaN(featuredVideoEl.duration)) {
+        const val = (featuredVideoEl.currentTime / featuredVideoEl.duration) * 100;
+        videoProgress.value = val;
+        currentTimeDisp.textContent = formatTime(featuredVideoEl.currentTime);
+        durationTimeDisp.textContent = formatTime(featuredVideoEl.duration);
+      }
+    });
+
+    function formatTime(secs) {
+      const m = Math.floor(secs / 60);
+      const s = Math.floor(secs % 60);
+      return `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+    }
+
+    function seekFeaturedVideo(val) {
+      if (!isNaN(featuredVideoEl.duration)) {
+        featuredVideoEl.currentTime = (val / 100) * featuredVideoEl.duration;
+      }
+    }
+
+    function togglePlayPause() {
+      if (featuredVideoEl.paused) {
+        featuredVideoEl.play();
+      } else {
+        featuredVideoEl.pause();
+      }
+    }
+
+    function toggleVideoSound() {
+      const muteIcon = document.getElementById('mute-icon');
+      const muteLabel = document.getElementById('mute-label');
+      if (featuredVideoEl.muted) {
+        featuredVideoEl.muted = false;
+        muteLabel.textContent = "Mute Sound";
+        muteIcon.setAttribute('data-lucide', 'volume-2');
+      } else {
+        featuredVideoEl.muted = true;
+        muteLabel.textContent = "Unmute Audio";
+        muteIcon.setAttribute('data-lucide', 'volume-x');
+      }
+      lucide.createIcons();
+    }
+
+    function restartFeaturedVideo() {
+      featuredVideoEl.currentTime = 0;
+      featuredVideoEl.play();
+    }
+
+    // Mobile nav
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobile-menu');
+      menu.classList.toggle('hidden');
+    }
+
+    // Admin Panel Logic
+    function toggleAdminPanel(open) {
+      const modal = document.getElementById('adminModal');
+      if (open) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        renderAdminWorkList();
+        renderAdminLeads();
+      } else {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function switchAdminTab(tabId) {
+      document.getElementById('videoTab').classList.add('hidden');
+      document.getElementById('workTab').classList.add('hidden');
+      document.getElementById('leadsTab').classList.add('hidden');
+
+      document.querySelectorAll('[id^="tab-btn-"]').forEach(btn => {
+        btn.className = "px-4 py-2 bg-white/5 text-brand-muted font-mono text-xs uppercase rounded-lg hover:text-white";
+      });
+
+      document.getElementById(tabId).classList.remove('hidden');
+      const activeBtn = document.getElementById(`tab-btn-${tabId.replace('Tab', '')}`);
+      if (activeBtn) {
+        activeBtn.className = "px-4 py-2 bg-brand-accent text-black font-mono text-xs font-bold uppercase rounded-lg";
+      }
+    }
+
+    function updateFeaturedVideoFromAdmin() {
+      const url = document.getElementById('adminVideoUrlInput').value.trim();
+      if (!url) return alert('Please enter a valid video URL');
+      videoSourceEl.src = url;
+      featuredVideoEl.load();
+      featuredVideoEl.play();
+      localStorage.setItem('tabrez_featured_video', url);
+      alert('Featured commercial video updated successfully!');
+    }
+
+    function handleLocalVideoUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const localUrl = URL.createObjectURL(file);
+      videoSourceEl.src = localUrl;
+      featuredVideoEl.load();
+      featuredVideoEl.play();
+      document.getElementById('adminVideoUrlInput').value = `Local Blob: ${file.name}`;
+      alert(`Loaded local video file: "${file.name}"!`);
+    }
+
+    function saveHeroEdits() {
+      const badge = document.getElementById('adminHeroBadgeInput').value;
+      const sub = document.getElementById('adminHeroSubInput').value;
+      document.getElementById('hero-badge').textContent = badge;
+      document.getElementById('hero-subtitle').textContent = sub;
+      localStorage.setItem('tabrez_hero_badge', badge);
+      localStorage.setItem('tabrez_hero_sub', sub);
+      alert('Hero copy updated successfully!');
+    }
+
+    function renderAdminWorkList() {
+      const list = document.getElementById('adminWorkList');
+      list.innerHTML = '';
+      portfolioData.forEach((item, idx) => {
+        const row = document.createElement('div');
+        row.className = "flex items-center justify-between p-3 bg-brand-black/60 rounded-xl border border-white/5 text-xs font-mono";
+        row.innerHTML = `
+          <div>
+            <div class="text-white font-bold">${item.title}</div>
+            <div class="text-brand-muted text-[11px]">${item.categoryLabel} — ${item.stats}</div>
+          </div>
+          <button onclick="deleteWorkItem('${item.id}')" class="text-red-400 hover:text-red-300 px-2 py-1 bg-red-500/10 rounded">Delete</button>
+        `;
+        list.appendChild(row);
+      });
+    }
+
+    function deleteWorkItem(id) {
+      portfolioData = portfolioData.filter(i => i.id !== id);
+      renderAdminWorkList();
+      renderWorkGrid();
+    }
+
+    function openAddNewWorkModal() {
+      const title = prompt("Enter Project / Brand Title:", "NEW BRAND COMMERCIAL");
+      if (!title) return;
+      const stats = prompt("Key Metric / Result Badge:", "+280% ROAS");
+      const category = prompt("Category (beverage / fitness / tech):", "beverage");
+
+      portfolioData.unshift({
+        id: Date.now().toString(),
+        title: title.toUpperCase(),
+        category: category || "beverage",
+        categoryLabel: category === "beverage" ? "Beverage Commercial" : "Brand Commercial",
+        stats: stats || "Top Creative",
+        thumbnail: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=800&q=80",
+        videoUrl: DEFAULT_VIDEO_URL,
+        description: "High-impact video ad campaign created for multi-channel acquisition."
+      });
+      renderAdminWorkList();
+      renderWorkGrid();
+    }
+
+    function renderAdminLeads() {
+      const list = document.getElementById('adminLeadsList');
+      const badge = document.getElementById('leadsCountBadge');
+      badge.textContent = leadsData.length;
+      list.innerHTML = '';
+
+      if (leadsData.length === 0) {
+        list.innerHTML = `<div class="text-center py-6 text-brand-muted text-xs font-mono">No inquiries received yet.</div>`;
+        return;
+      }
+
+      leadsData.forEach((lead, i) => {
+        const item = document.createElement('div');
+        item.className = "p-4 bg-brand-black/70 rounded-xl border border-white/5 font-mono text-xs space-y-2";
+        item.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="text-brand-accent font-bold">${lead.name} (${lead.email})</span>
+            <span class="text-brand-muted text-[10px]">${lead.date || 'Recent'}</span>
+          </div>
+          <div class="text-white/80"><span class="text-brand-muted">Budget:</span> ${lead.budget} | <span class="text-brand-muted">Brand:</span> ${lead.brand || 'N/A'}</div>
+          <p class="text-brand-muted text-[11px] bg-white/[0.02] p-2 rounded">${lead.message}</p>
+        `;
+        list.appendChild(item);
+      });
+    }
+
+    function clearAllLeads() {
+      if (confirm('Clear all inquiries from inbox?')) {
+        leadsData = [];
+        localStorage.setItem('tabrez_crm_leads', JSON.stringify(leadsData));
+        renderAdminLeads();
+      }
+    }
+
+    function handleInquirySubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('clientName').value;
+      const email = document.getElementById('clientEmail').value;
+      const brand = document.getElementById('clientBrand').value;
+      const budget = document.getElementById('clientBudget').value;
+      const message = document.getElementById('clientMessage').value;
+
+      const newLead = {
+        name,
+        email,
+        brand,
+        budget,
+        message,
+        date: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+      };
+
+      leadsData.unshift(newLead);
+      localStorage.setItem('tabrez_crm_leads', JSON.stringify(leadsData));
+
+      const status = document.getElementById('inquiryStatus');
+      status.textContent = "✓ Inquiry sent directly to Tabrez! We'll reply within 2 hours.";
+      status.classList.remove('hidden');
+
+      document.getElementById('projectInquiryForm').reset();
+      renderAdminLeads();
+    }
+
+    // Modal Video Player for items
+    function openPortfolioModal(id) {
+      const item = portfolioData.find(i => i.id === id);
+      if (!item) return;
+
+      const modal = document.getElementById('portfolioVideoModal');
+      const player = document.getElementById('modalVideoPlayer');
+      const title = document.getElementById('modalVideoTitle');
+      const desc = document.getElementById('modalVideoDesc');
+
+      title.textContent = item.title;
+      desc.textContent = `${item.categoryLabel} • ${item.stats} • ${item.description}`;
+      player.src = item.videoUrl;
+
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      player.play();
+    }
+
+    function closePortfolioModal() {
+      const modal = document.getElementById('portfolioVideoModal');
+      const player = document.getElementById('modalVideoPlayer');
+      player.pause();
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    // Initialize initial render
+    renderWorkGrid('all');
+    renderAdminLeads();
+  </script>
+</body>
+</html>
